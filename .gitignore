@@ -1,0 +1,13 @@
+# OS related files 
+# Windows
+Thumbs.db
+# macOS
+.DS_Store
+
+
+# Dist and build directories
+dist/
+build/
+
+# Private folder
+.private/
