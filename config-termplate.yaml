@@ -1,0 +1,34 @@
+device:
+  name: "MyLinuxDevice"
+  manufacturer: "DeviceManufacturer"
+  model: "DeviceModel"
+  serial_number: "xxxxxxxxxxxxxx..."
+  refresh_period_s: 30
+
+mqtt_server:
+  ip: "192.168.1.50"
+  port: "1883"
+  username: "myuser"
+  password: "mypassword"
+
+sensors:
+  - name: "CPU Temperature"
+    command: "cat /sys/class/thermal/thermal_zone0/temp | awk '{print $1/1000}'"
+    device_class: "temperature"
+    state_class: "measurement"
+    unit_of_measurement: "°C"
+  - name: "Memory Usage"
+    command: "free | grep Mem | awk '{print $3/$2 * 100.0}'"
+    device_class: "data"
+    state_class: "measurement"
+    unit_of_measurement: "%"
+  - name: "Disk Space"
+    command: "df / | tail -1 | awk '{print $5}' | sed 's/%//'"
+    device_class: "battery"
+    state_class: "measurement"
+    unit_of_measurement: "%"
+  - name: "CPU Load"
+    command: "top -bn1 | grep 'Cpu(s)' | awk '{print $2 + $4}'"
+    device_class: "load"
+    state_class: "measurement"
+    unit_of_measurement: "%"

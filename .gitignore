@@ -1,0 +1,13 @@
+# OS related files
+.DS_Store
+
+# Build files
+build/
+dist/
+
+# Private files
+.private/
+
+# Config files
+config.yaml
+.env
