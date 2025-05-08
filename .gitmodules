@@ -1,0 +1,3 @@
+[submodule "libs/MQTT-C"]
+	path = libs/MQTT-C
+	url = git@github.com:LiamBindle/MQTT-C.git

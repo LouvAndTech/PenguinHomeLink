@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "conf_types.h": "c",
+        "mqtt.h": "c"
+    }
+}
