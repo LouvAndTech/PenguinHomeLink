@@ -57,6 +57,7 @@ type Config struct {
 		DeviceClass       string `yaml:"device_class"`
 		StateClass        string `yaml:"state_class"`
 		UnitOfMeasurement string `yaml:"unit_of_measurement"`
+		Icon              string `yaml:"icon,omitempty"`
 	} `yaml:"sensors"`
 }
 

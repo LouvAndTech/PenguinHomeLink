@@ -28,6 +28,7 @@ type component struct {
 	ValueTemplate     string `json:"value_template"`
 	UniqueID          string `json:"unique_id"`
 	StateTopic        string `json:"state_topic"`
+	Icon              string `json:"icon,omitempty"`
 }
 
 // autoDiscoveryDeviceMQTT represents the structure for an MQTT auto-discovery device.
@@ -114,6 +115,7 @@ func FormatMQTTConfig(device *Device) (string, error) {
 			ValueTemplate:     "{{ value_json." + strcase.ToSnake(sensor.config.Name) + " }}",
 			UniqueID:          sensor.config.Name + "_" + device.GetDeviceInfo().Name,
 			StateTopic:        GetStateTopic(device),
+			Icon:              sensor.config.Icon,
 		}
 		autoDiscoveryDevice.Components[strcase.ToSnake(sensor.config.Name)] = component
 	}

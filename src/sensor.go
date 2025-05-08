@@ -21,6 +21,7 @@ type sensorConfig struct {
 	DeviceClass       string
 	StateClass        string
 	UnitOfMeasurement string
+	Icon              string
 }
 
 // Sensor represents a sensor device in the system.
@@ -44,7 +45,7 @@ type Sensor struct {
 //
 // Returns:
 //   - A pointer to the newly created Sensor instance.
-func NewSensor(name string, command string, deviceClass string, stateClass string, unitOfMeasurement string, device *Device) *Sensor {
+func NewSensor(name string, command string, deviceClass string, stateClass string, unitOfMeasurement string, icon string, device *Device) *Sensor {
 	return &Sensor{
 		config: &sensorConfig{
 			Name:              name,
@@ -52,6 +53,7 @@ func NewSensor(name string, command string, deviceClass string, stateClass strin
 			DeviceClass:       deviceClass,
 			StateClass:        stateClass,
 			UnitOfMeasurement: unitOfMeasurement,
+			Icon:              icon,
 		},
 		value:  "",
 		Device: device,
