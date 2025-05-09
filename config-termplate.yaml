@@ -1,9 +1,11 @@
+software:
+  refresh_period_s: 30
+
 device:
   name: "MyLinuxDevice"
   manufacturer: "DeviceManufacturer"
   model: "DeviceModel"
   serial_number: "xxxxxxxxxxxxxx..."
-  refresh_period_s: 30
 
 mqtt_server:
   ip: "192.168.1.50"
@@ -19,16 +21,19 @@ sensors:
     unit_of_measurement: "°C"
   - name: "Memory Usage"
     command: "free | grep Mem | awk '{print $3/$2 * 100.0}'"
-    device_class: "data"
+    device_class: "power_factor"
     state_class: "measurement"
     unit_of_measurement: "%"
-  - name: "Disk Space"
+    icon: "mdi:memory"
+  - name: "Disk Usage"
     command: "df / | tail -1 | awk '{print $5}' | sed 's/%//'"
-    device_class: "battery"
+    device_class: "power_factor"
     state_class: "measurement"
     unit_of_measurement: "%"
+    icon: "mdi:harddisk"
   - name: "CPU Load"
     command: "top -bn1 | grep 'Cpu(s)' | awk '{print $2 + $4}'"
-    device_class: "load"
+    device_class: "power_factor"
     state_class: "measurement"
     unit_of_measurement: "%"
+    icon: "mdi:cpu-64-bit"
