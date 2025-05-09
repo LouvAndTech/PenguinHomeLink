@@ -36,7 +36,7 @@ func main() {
 
 	// Create the sensors
 	for _, sensorConfig := range config.Sensors {
-		sensor := NewSensor(sensorConfig.Name, sensorConfig.Command, sensorConfig.DeviceClass, sensorConfig.StateClass, sensorConfig.UnitOfMeasurement, device)
+		sensor := NewSensor(sensorConfig.Name, sensorConfig.Command, sensorConfig.DeviceClass, sensorConfig.StateClass, sensorConfig.UnitOfMeasurement, sensorConfig.Icon, device)
 		device.AddSensor(sensor)
 	}
 	// Print the sensors information
@@ -65,7 +65,7 @@ func run(device *Device, MQTTServer *MQTTProxy, refreshPeriod int) {
 		panic(err)
 	}
 
-	lastConfigSent := time.Now()
+	lastConfigSent := time.Date(2020, 10, 26, 0, 0, 0, 0, time.UTC)
 	for {
 		func() {
 			//If an error occurs, wait for 2 mins before trying again
