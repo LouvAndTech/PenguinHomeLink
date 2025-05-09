@@ -64,7 +64,7 @@ PanguininHomeLink uses the Home Assistant MQTT integration to send data to your 
 ## Configuration
 
 You can follow the example in `config-termplate.yaml` to create your own configuration file named `config.yaml` placed at the same level as your binary.
-Below is a detailed explanation of the configuration file elements:
+Below is a detailed explanation of the configuration file elements. You will also find examples of the configuration file for differents host in the `configs` directory.
 
 *Note that the `sensor` category is a list.*
 
