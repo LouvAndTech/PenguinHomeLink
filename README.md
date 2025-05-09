@@ -92,8 +92,9 @@ Below is a detailed explanation of the configuration file elements. You will als
 
 This is a list of potential improvements for the project:
 
+- Add a automatic github action to build the project for all platforms.
 - Improve the installation process using something like a `systemd` service.
-- Allow a deeper configuration of the sensors based on Home Assistant's capabilities, and allow more of the configs to be optional.
+- Allow a deeper configuration of the sensors based on Home Assistant's capabilities, and allow more of the elements to be optional.
 - Add more configurations examples.
 
 ## Contributing
