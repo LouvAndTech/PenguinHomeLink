@@ -80,13 +80,21 @@ Below is a detailed explanation of the configuration file elements:
 |                 | `username`            | The username for authenticating with the MQTT server.                              | `"myuser"`                                                            |
 |                 | `password`            | The password for authenticating with the MQTT server.                              | `"mypassword"`                                                        |
 | **sensors**[*]  | `name`                | The name of the sensor.                                                            | `"CPU Temperature"`                                                   |
-|                 | `command`             | The command to execute for retrieving the sensor's data.                           | `"cat /sys/class/thermal/thermal_zone0/temp | awk '{print $1/1000}'"` |
+|                 | `command`             | The command to execute for retrieving the sensor's data.                           | `"cat /sys/class/thermal/thermal_zone0/temp \| awk '{print $1/1000}'"` |
 |                 | `device_class`        | The type of sensor data (e.g., temperature, power, etc.).                          | `"temperature"`                                                       |
 |                 | `state_class`         | The state class of the sensor (e.g., measurement).                                 | `"measurement"`                                                       |
 |                 | `unit_of_measurement` | The unit in which the sensor data is measured.                                     | `"°C"`                                                                |
 |                 | `icon` *(optional)*   | (Optional) The icon to represent the sensor in Home Assistant.                     | `"mdi:cpu-64-bit"`                                                    |
 
 *Note that the example are tested for a proxmox instance.*
+
+## Improvements
+
+This is a list of potential improvements for the project:
+
+- Improve the installation process using something like a `systemd` service.
+- Allow a deeper configuration of the sensors based on Home Assistant's capabilities, and allow more of the configs to be optional.
+- Add more configurations examples.
 
 ## Contributing
 
