@@ -44,7 +44,7 @@ jobs:
       - name: Rename artifact
         run: |
           if [[ "${{ matrix.os }}" == "windows" ]]; then
-            mv bin/penguinhomelink_${{ matrix.os }}_${{ matrix.arch }} bin/penguinhomelink_${{ matrix.os }}_${{ matrix.arch }}
+            mv bin/penguinhomelink_${{ matrix.os }}_${{ matrix.arch }} bin/penguinhomelink_${{ matrix.os }}_${{ matrix.arch }}.exe
           fi
 
       - name: Upload binaries
