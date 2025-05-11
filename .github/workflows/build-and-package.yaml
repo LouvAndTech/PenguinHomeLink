@@ -47,13 +47,13 @@ jobs:
           if [[ "${{ matrix.os }}" == "windows" ]]; then
             ARTIFACT="$ARTIFACT.exe"
           fi
-          cp build/penguinhomelink "dist/$ARTIFACT"
+          cp bin/penguinhomelink "bin/$ARTIFACT"
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:
           name: binaries
-          path: dist/*
+          path: bin/*
 
   deb-packaging:
     name: Build Debian Packages
@@ -71,7 +71,7 @@ jobs:
           echo "TARGET_ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
 
       - name: Build Debian package
-        run: make package
+        run: make deb
 
       - name: Rename .deb artifact
         run: |
