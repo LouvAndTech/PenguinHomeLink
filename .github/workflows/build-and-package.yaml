@@ -1,0 +1,111 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+    branches:
+        - action
+
+env:
+  MAINTAINER: "Elouan Lérissel"
+  URL: "https://github.com/LouvAndTech/PenguinHomeLink"
+  DESCRIPTION: "PenguinHomeLink - A service to update your HomeAssistant with your server status"
+
+jobs:
+  build:
+    name: Build Binaries and Packages
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [linux, windows, darwin]
+        arch: [amd64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU for cross-platform builds
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Go (or appropriate toolchain)
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Set up environment variables
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "TARGET_ENV=${{ matrix.os }}" >> $GITHUB_ENV
+          echo "TARGET_ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
+
+      - name: Build binary
+        run: make
+
+      - name: Rename artifact
+        run: |
+          mkdir -p dist
+          ARTIFACT="penguinhomelink-${{ matrix.os }}-${{ matrix.arch }}"
+          if [[ "${{ matrix.os }}" == "windows" ]]; then
+            ARTIFACT="$ARTIFACT.exe"
+          fi
+          cp build/penguinhomelink "dist/$ARTIFACT"
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: dist/*
+
+  deb-packaging:
+    name: Build Debian Packages
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up environment
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "TARGET_ENV=linux" >> $GITHUB_ENV
+          echo "TARGET_ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
+
+      - name: Build Debian package
+        run: make package
+
+      - name: Rename .deb artifact
+        run: |
+          mkdir -p dist
+          mv build/*.deb dist/penguinhomelink_${{ matrix.arch }}.deb
+
+      - name: Upload Debian package
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-packages
+          path: dist/*.deb
+
+  release:
+    name: Create Draft Release
+    needs: [build, deb-packaging]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries
+          path: dist
+
+      - name: Download Debian packages
+        uses: actions/download-artifact@v4
+        with:
+          name: deb-packages
+          path: dist
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          draft: true
+          files: dist/*
