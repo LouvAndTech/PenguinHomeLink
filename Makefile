@@ -62,35 +62,57 @@ PACKAGE_BUILD_DIR = $(BUILD_DIR)/penguinhomelink_$(VERSION)_$(TARGET_ENV)_$(TARG
 
 DEB_BIN = /usr/bin/$(EXEC)
 DEB_CONTROL = /DEBIAN/control
-DEB_CONF = /etc/penguinhomelink/config.yaml
+DEB_CONF = /etc/penguinhomelink/config-termplate.yaml
 DEB_SERVICE = /lib/systemd/system/penguinhomelink.service
 
 ENV_FILE = .env
 
-deb: $(EXEC_PATH)
+deb: $(PACKAGE_OUT_DIR)/$(DEB_PACKAGE_NAME)_$(VERSION)_$(TARGET_ENV)_$(TARGET_ARCH).deb
+
+$(PACKAGE_OUT_DIR)/$(DEB_PACKAGE_NAME)_$(VERSION)_$(TARGET_ENV)_$(TARGET_ARCH).deb: $(PACKAGE_BUILD_DIR) $(EXEC_PATH)
 	@echo === "Building Debian package" ===
-# Build the structure
-	@$(MKDIR_P) $(dir $(PACKAGE_BUILD_DIR)/$(DEB_CONTROL))
-	@$(MKDIR_P) $(dir $(PACKAGE_BUILD_DIR)/$(DEB_SERVICE))
-	@$(MKDIR_P) $(dir $(PACKAGE_BUILD_DIR)/$(DEB_BIN))
-	@$(MKDIR_P) $(dir $(PACKAGE_BUILD_DIR)/$(DEB_CONF))
-# Copy the files 
-	cp $(EXEC_PATH) $(PACKAGE_BUILD_DIR)/$(DEB_BIN)
-	cp $(PACKAGE_TEMPLATE_DIR)/$(DEB_CONF) $(PACKAGE_BUILD_DIR)/$(DEB_CONF)
-	source ./$(ENV_FILE) && \
-		export DEB_BIN=$(DEB_BIN) && \
-		export DEB_CONF=$(DEB_CONF) && \
-		$(INCLUDE_ENV) envsubst < $(PACKAGE_TEMPLATE_DIR)/$(DEB_CONTROL).in > $(PACKAGE_BUILD_DIR)/$(DEB_CONTROL)
-		$(INCLUDE_ENV) envsubst < $(PACKAGE_TEMPLATE_DIR)/$(DEB_SERVICE).in > $(PACKAGE_BUILD_DIR)/$(DEB_SERVICE)
+	@$(MKDIR_P) $(PACKAGE_OUT_DIR)
+	dpkg-deb --build $(PACKAGE_BUILD_DIR) $@
+	@echo "=== Debian package created at $@ ===\n"
 
-	$(MKDIR_P) $(PACKAGE_OUT_DIR)
-	dpkg-deb --build $(PACKAGE_BUILD_DIR) $(PACKAGE_OUT_DIR)/$(DEB_PACKAGE_NAME)_$(VERSION)_$(TARGET_ENV)_$(TARGET_ARCH).deb
-	@echo "=== Debian package created at $(PACKAGE_OUT_DIR)/$(DEB_PACKAGE_NAME)_$(VERSION)_$(TARGET_ENV)_$(TARGET_ARCH).deb ===\n"
+$(PACKAGE_BUILD_DIR): $(PACKAGE_BUILD_DIR)/$(DEB_CONTROL) $(PACKAGE_BUILD_DIR)/$(DEB_SERVICE) $(PACKAGE_BUILD_DIR)/$(DEB_BIN) $(PACKAGE_BUILD_DIR)/$(DEB_CONF)
 
+$(PACKAGE_BUILD_DIR)/$(DEB_CONTROL): $(PACKAGE_TEMPLATE_DIR)/$(DEB_CONTROL).in
+	@echo === "Creating control file" ===
+	@$(MKDIR_P) $(dir $@)
+	@bash -c '\
+		source ./$(ENV_FILE); \
+		envsubst < $< > $@; \
+	'
+	@echo "=== Control file created at $@ ===\n"
+
+$(PACKAGE_BUILD_DIR)/$(DEB_SERVICE): $(PACKAGE_TEMPLATE_DIR)/$(DEB_SERVICE).in
+	@echo === "Creating service file" ===
+	@$(MKDIR_P) $(dir $@)
+	@bash -c '\
+		source ./$(ENV_FILE); \
+		export DEB_BIN=$(DEB_BIN); \
+		export DEB_CONF=$(DEB_CONF); \
+		envsubst < $< > $@; \
+	'
+	@echo "=== Service file created at $@ ===\n"
+
+$(PACKAGE_BUILD_DIR)/$(DEB_BIN): $(EXEC_PATH)
+	@echo === "Copying binary to package directory" ===
+	@$(MKDIR_P) $(dir $@)
+	cp $< $@
+	@echo "=== Binary copied to $@ ===\n"
+
+$(PACKAGE_BUILD_DIR)/$(DEB_CONF): $(PACKAGE_TEMPLATE_DIR)/$(DEB_CONF)
+	@echo === "Copying config file to package directory" ===
+	@$(MKDIR_P) $(dir $@)
+	cp $< $@
+	@echo "=== Config file copied to $@ ===\n"
 
 package-clean:
 	@echo === "Cleaning up package build directory" ===
 	rm -rf $(PACKAGE_BUILD_DIR)
+	rm -rf $(PACKAGE_OUT_DIR)
 	@echo "=== Package build directory cleaned ===\n"
 
 phony: deb package-clean
