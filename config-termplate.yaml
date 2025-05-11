@@ -15,7 +15,7 @@ mqtt_server:
 
 sensors:
   - name: "CPU Temperature"
-    command: "cat /sys/class/thermal/thermal_zone0/temp | awk '{print $1/1000}'"
+    command: "echo CPU"
     device_class: "temperature"
     state_class: "measurement"
     unit_of_measurement: "°C"

@@ -1,0 +1,11 @@
+[Unit]
+Description=${DESCRIPTION}
+After=network.target
+
+[Service]
+ExecStart=${DEB_BIN} ${DEB_CONF}
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target

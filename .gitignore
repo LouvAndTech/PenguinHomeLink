@@ -4,6 +4,7 @@
 # Build files
 build/
 dist/
+bin/
 
 # Private files
 .private/
@@ -11,3 +12,6 @@ dist/
 # Config files
 config.yaml
 .env
+
+# Do not ignore files in packaging
+!packaging/**

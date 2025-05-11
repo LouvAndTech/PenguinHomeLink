@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -15,12 +16,17 @@ const (
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		panic("Usage: PenguinHomeLink <config-file-path>")
+	}
+	configFilePath := os.Args[1]
 	fmt.Println("Starting PenguinHomeLink...")
 
 	fmt.Println(">> Configuring...")
 	// Parse the confuguration file
 	fmt.Println(">> Loading configuration...")
-	config, err := LoadConfig("config.yaml")
+
+	config, err := LoadConfig(configFilePath)
 	if err != nil {
 		panic(err)
 	}

@@ -1,0 +1,8 @@
+Package: penguinhomelink
+Version: ${VERSION}
+Section: utils
+Priority: optional
+Architecture: ${TARGET_ARCH}
+Depends: systemd
+Maintainer: ${MAINTAINER} <${URL}>
+Description: ${DESCRIPTION}
