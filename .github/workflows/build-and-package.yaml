@@ -59,6 +59,7 @@ jobs:
 
   deb-packaging:
     name: Build Debian Packages
+    needs: [build]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -71,6 +72,12 @@ jobs:
           echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
           echo "TARGET_ENV=linux" >> $GITHUB_ENV
           echo "TARGET_ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
+
+      - name: Download Linux binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: binary-linux-${{ matrix.arch }}
+          path: bin
 
       - name: Build Debian package
         run: make deb
@@ -111,5 +118,11 @@ jobs:
           tag_name: ${{ github.ref_name }}
           draft: true
           files: |
-            bin/**/*
-            dist/**/*
+            bin/binary-linux-amd64/*
+            bin/binary-linux-arm64/*
+            bin/binary-windows-amd64/*
+            bin/binary-windows-arm64/*
+            bin/binary-darwin-amd64/*
+            bin/binary-darwin-arm64/*
+            dist/deb-package-amd64/*
+            dist/deb-package-arm64/*
