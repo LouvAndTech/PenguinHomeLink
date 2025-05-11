@@ -46,7 +46,7 @@ jobs:
           mkdir -p bin
           ARTIFACT="penguinhomelink_${{ matrix.os }}_${{ matrix.arch }}"
           if [[ "${{ matrix.os }}" == "windows" ]]; then
-            ARTIFACT="$ARTIFACT.exe"
+            cp ARTIFACT "$ARTIFACT.exe"
           fi
 
       - name: Upload binaries
