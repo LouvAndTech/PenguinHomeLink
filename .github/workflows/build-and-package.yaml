@@ -7,6 +7,9 @@ on:
     branches:
         - action
 
+permissions:
+  contents: write
+
 env:
   MAINTAINER: "Elouan Lérissel"
   URL: "https://github.com/LouvAndTech/PenguinHomeLink"
@@ -114,6 +117,5 @@ jobs:
           tag_name: ${{ github.ref_name }}
           draft: true
           files: |
-            dist/*
-            bin/*
-            
+            bin/**/*
+            dist/**/*
