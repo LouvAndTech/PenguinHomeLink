@@ -56,6 +56,8 @@ jobs:
         with:
           name: binary-${{ matrix.os }}-${{ matrix.arch }}
           path: bin/*
+          if-no-files-found: ignore
+          retention-days: 1
 
   deb-packaging:
     name: Build Debian Packages
@@ -85,6 +87,9 @@ jobs:
         with:
           name: deb-package-${{ matrix.arch }}
           path: dist/*.deb
+          if-no-files-found: ignore
+          retention-days: 1
+
 
   release:
     name: Create Draft Release
