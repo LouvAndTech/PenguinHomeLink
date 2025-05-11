@@ -22,7 +22,7 @@ PenguinHomeLink leverages the Home Assistant MQTT integration to transmit data t
 
 This design makes PenguinHomeLink highly flexible and adaptable, allowing it to work seamlessly on virtually any system where commands can be used to retrieve device information.
 
-> *For example, you can use `cat /sys/class/thermal/thermal_zone0/temp | awk '{print $1/1000}'` to gather the temperature of the CPU on Debian-based distros. Note the use of `awk` for formatting.*
+> *For example, you can use `cat /sys/class/thermal/thermal_zone0/temp | awk '{print $1/1000}'` to gather the temperature of the CPU on Debian-based distros.*
 
 ## Installation
 
@@ -42,15 +42,15 @@ For other Linux distributions, macOS, and Windows, you can use the binary or bui
 1. Download the latest package from the [releases page](https://github.com/LouvAndTech/PenguinHomeLink/releases).
 2. Install the package using `dpkg` or `apt`:
     ```bash
-    sudo dpkg -i penguin-home-link_0.1.0_amd64.deb
+    sudo dpkg -i /path/to/penguinhomelink_<amd64/arm64>.deb
     ```
     or
     ```bash
-    sudo apt install ./penguin-home-link_0.1.0_amd64.deb
+    sudo apt install /path/to/penguinhomelink_<amd64/arm64>.deb
     ```
-3. Copy the example configuration to `/etc/penguin-home-link/config.yaml`:
+3. Copy the example configuration to `/etc/penguinhomelink/config.yaml`:
     ```bash
-    sudo cp /usr/share/doc/penguin-home-link/examples/config-template.yaml /etc/penguin-home-link/config.yaml
+    sudo cp /etc/penguinhomelink/config-template.yaml /etc/penguinhomelink/config.yaml
     ```
 4. Edit the configuration file to set your MQTT server and sensors following the [configuration section below](#configuration).
 
@@ -145,6 +145,11 @@ Below is a detailed explanation of the configuration file elements. You will als
 |                 | `icon` *(optional)*   | (Optional) The icon to represent the sensor in Home Assistant.                     | `"mdi:cpu-64-bit"`                                                    |
 
 *Note that the examples are tested for a Proxmox instance.*
+
+### Tips for configuration 
+
+- You can take advantage of `awk` for formatting commands output.
+- Since the software simply take the output of the command, you can use more complexe bash script or even use other languages like Python or Go to get the data you want. Just make sure to return a single line with the value you want to send to Home Assistant.
 
 ## Improvements
 
