@@ -11,6 +11,7 @@ env:
   MAINTAINER: "Elouan Lérissel"
   URL: "https://github.com/LouvAndTech/PenguinHomeLink"
   DESCRIPTION: "PenguinHomeLink - A service to update your HomeAssistant with your server status"
+  FAKE_TAG: "0.0.0"
 
 jobs:
   build:
@@ -33,16 +34,18 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "VERSION=${FAKE_TAG}" >> $GITHUB_ENV
           echo "TARGET_ENV=${{ matrix.os }}" >> $GITHUB_ENV
           echo "TARGET_ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
+
+#echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV 
 
       - name: Build binary
         run: make
 
       - name: Rename artifact
         run: |
-          mkdir -p dist
+          mkdir -p bin
           ARTIFACT="penguinhomelink-${{ matrix.os }}-${{ matrix.arch }}"
           if [[ "${{ matrix.os }}" == "windows" ]]; then
             ARTIFACT="$ARTIFACT.exe"
