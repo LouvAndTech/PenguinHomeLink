@@ -46,11 +46,11 @@ jobs:
       - name: Rename artifact
         run: |
           mkdir -p bin
-          ARTIFACT="penguinhomelink-${{ matrix.os }}-${{ matrix.arch }}"
+          ARTIFACT="penguinhomelink_${{ matrix.os }}_${{ matrix.arch }}"
           if [[ "${{ matrix.os }}" == "windows" ]]; then
             ARTIFACT="$ARTIFACT.exe"
           fi
-          cp bin/penguinhomelink-${{ matrix.os }}-${{ matrix.arch }} "bin/$ARTIFACT"
+          cp bin/penguinhomelink_${{ matrix.os }}_${{ matrix.arch }} "bin/$ARTIFACT"
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4
@@ -79,7 +79,7 @@ jobs:
       - name: Rename .deb artifact
         run: |
           mkdir -p dist
-          mv build/*.deb dist/penguinhomelink_${{ matrix.arch }}.deb
+          mv dist/*.deb dist/penguinhomelink_${{ matrix.arch }}.deb
 
       - name: Upload Debian package
         uses: actions/upload-artifact@v4
