@@ -43,10 +43,8 @@ jobs:
 
       - name: Rename artifact
         run: |
-          mkdir -p bin
-          ARTIFACT="penguinhomelink_${{ matrix.os }}_${{ matrix.arch }}"
           if [[ "${{ matrix.os }}" == "windows" ]]; then
-            cp ARTIFACT "$ARTIFACT.exe"
+            mv bin/penguinhomelink_${{ matrix.os }}_${{ matrix.arch }} bin/penguinhomelink_${{ matrix.os }}_${{ matrix.arch }}
           fi
 
       - name: Upload binaries
