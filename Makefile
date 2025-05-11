@@ -62,7 +62,8 @@ PACKAGE_BUILD_DIR = $(BUILD_DIR)/penguinhomelink_$(VERSION)_$(TARGET_ENV)_$(TARG
 
 DEB_BIN = /usr/bin/$(EXEC)
 DEB_CONTROL = /DEBIAN/control
-DEB_CONF = /etc/penguinhomelink/config-termplate.yaml
+DEB_TEMPLATE_CONF = /etc/penguinhomelink/config-template.yaml
+DEB_CONF = /etc/penguinhomelink/config.yaml
 DEB_SERVICE = /lib/systemd/system/penguinhomelink.service
 
 ENV_FILE = .env
@@ -75,7 +76,7 @@ $(PACKAGE_OUT_DIR)/$(DEB_PACKAGE_NAME)_$(VERSION)_$(TARGET_ENV)_$(TARGET_ARCH).d
 	dpkg-deb --build $(PACKAGE_BUILD_DIR) $@
 	@echo "=== Debian package created at $@ ===\n"
 
-$(PACKAGE_BUILD_DIR): $(PACKAGE_BUILD_DIR)/$(DEB_CONTROL) $(PACKAGE_BUILD_DIR)/$(DEB_SERVICE) $(PACKAGE_BUILD_DIR)/$(DEB_BIN) $(PACKAGE_BUILD_DIR)/$(DEB_CONF)
+$(PACKAGE_BUILD_DIR): $(PACKAGE_BUILD_DIR)/$(DEB_CONTROL) $(PACKAGE_BUILD_DIR)/$(DEB_SERVICE) $(PACKAGE_BUILD_DIR)/$(DEB_BIN) $(PACKAGE_BUILD_DIR)/$(DEB_TEMPLATE_CONF)
 
 $(PACKAGE_BUILD_DIR)/$(DEB_CONTROL): $(PACKAGE_TEMPLATE_DIR)/$(DEB_CONTROL).in
 	@echo === "Creating control file" ===
@@ -103,7 +104,7 @@ $(PACKAGE_BUILD_DIR)/$(DEB_BIN): $(EXEC_PATH)
 	cp $< $@
 	@echo "=== Binary copied to $@ ===\n"
 
-$(PACKAGE_BUILD_DIR)/$(DEB_CONF): $(PACKAGE_TEMPLATE_DIR)/$(DEB_CONF)
+$(PACKAGE_BUILD_DIR)/$(DEB_TEMPLATE_CONF): $(PACKAGE_TEMPLATE_DIR)/$(DEB_TEMPLATE_CONF)
 	@echo === "Copying config file to package directory" ===
 	@$(MKDIR_P) $(dir $@)
 	cp $< $@
