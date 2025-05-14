@@ -9,8 +9,8 @@ permissions:
   contents: write
 
 env:
-  MAINTAINER: "Elouan Lérissel"
-  URL: "https://github.com/LouvAndTech/PenguinHomeLink"
+  URL: "${{ github.server_url }}/${{ github.repository }}"
+  MAINTAINER: "Elouan Lérissel" # Used in the Makefile
   DESCRIPTION: "PenguinHomeLink - A service to update your HomeAssistant with your server status"
 
 jobs:
@@ -37,6 +37,7 @@ jobs:
           echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
           echo "TARGET_ENV=${{ matrix.os }}" >> $GITHUB_ENV
           echo "TARGET_ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
+          echo "URL=${{ github.server_url }}/${{ github.repository }}" >> $GITHUB_ENV
 
       - name: Build binary
         run: make
@@ -70,6 +71,7 @@ jobs:
           echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
           echo "TARGET_ENV=linux" >> $GITHUB_ENV
           echo "TARGET_ARCH=${{ matrix.arch }}" >> $GITHUB_ENV
+          echo "URL=${{ github.server_url }}/${{ github.repository }}" >> $GITHUB_ENV
 
       - name: Download Linux binaries
         uses: actions/download-artifact@v4
